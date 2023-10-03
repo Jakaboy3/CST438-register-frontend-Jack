@@ -11,7 +11,7 @@ const AdminHome = ()  => {
         }, [] )
 
 
-    const fetchStudents = (student_id) => {
+    const fetchStudents = () => {
         // const row_id = event.target.parentNode.parentNode.rowIndex - 1;
 
         fetch('http://localhost:8080/student')
@@ -22,22 +22,24 @@ const AdminHome = ()  => {
             setMessage("Exception. "+err);
          } );
     }
-    // const editStudent = (student_id) => {
+    const editStudent = (s) => {
         
-    //     fetch("http://localhost:8080/student"+ student_id, {
-    //         method: 'PUT',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify(students)
-    //     })
-    //     .then(res => {
-    //         if (!res.ok) {
-    //             console.log('Error editing student:', res.status);
-    //         }
-    //     })
-    //     .catch(err => {
-    //         console.error("Exception editing student:", err);
-    //     });
-    // };
+        fetch("http://localhost:8080/student/"+ s.student_id, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(s)
+        })
+        .then(res => {
+            if (!res.ok) {
+                console.log('Error editing student:', res.status);
+            } else {
+                fetchStudents();
+            }
+        })
+        .catch(err => {
+            console.error("Exception editing student:", err);
+        });
+    };
     const addStudent = (s) =>{
         fetch("http://localhost:8080/student",
         {
@@ -114,6 +116,8 @@ const AdminHome = ()  => {
                         <td>{row.email}</td>
                         <td>{row.statusCode}</td>
                         <td>{row.status}</td>
+                        <td><EditStudent editStudent={students[idx]} update={editStudent}/>
+</td>
 
                         <td><button type="button" margin="auto" onClick={dropStudent}>Drop</button></td>
                         </tr>
